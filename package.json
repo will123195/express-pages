@@ -1,0 +1,20 @@
+{
+  "name": "express-pages",
+  "version": "1.0.5",
+  "description": "Automatic routing for express",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "will123195",
+  "license": "MIT",
+  "devDependencies": {
+    "express": "^4.13.0"
+  },
+  "dependencies": {
+    "body-parser": "^1.13.1",
+    "express-page": "0.0.3",
+    "hide-property": "0.0.1",
+    "sugar-glob": "^1.2.0"
+  }
+}
