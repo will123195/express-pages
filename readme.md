@@ -1,13 +1,17 @@
-express-pages
-=============
+# express-pages
 
-Automatic Routing for Express
+Automatic routing for express
 
+## Install
 
-Basic Usage
-===========
+```
+npm install express
+npm install express-pages
+```
 
-index.js
+## Usage
+
+### index.js
 ```js
 var express = require('express')
 var pages = require('express-pages')
@@ -26,7 +30,7 @@ app.use('/', pages({
 
 ```
 
-./pages/about-us.js
+### ./pages/about-us.js
 ```js
 // uri: /about-us
 module.exports = function() {
