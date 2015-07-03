@@ -11,30 +11,41 @@ npm install express-pages
 
 ## Usage
 
-### index.js
+#### index.js
 ```js
 var express = require('express')
 var pages = require('express-pages')
-
 var app = express()
 
-app.use('/', pages({
+app.set('port', (process.env.PORT || 5000))
+
+app.use('/v1', pages({
   dir: './api',
   ext: '.js',
   helpers: {
-    send: function(body) {
-      this.res.send(body)
+    beep: function () {
+      return 'boop'
     }
   }
 })
 
+app.listen(app.get('port'), function() {
+  console.log([
+    'Running: http://localhost:' + app.get('port'),
+    'NODE_ENV: ' + process.env.NODE_ENV,
+  ].join('\n'))
+})
 ```
 
-### ./pages/about-us.js
+#### ./api/beep.js
 ```js
-// uri: /about-us
-module.exports = function() {
-  this.send('<html><body><h1>About Us</h1></body></html>')
+//
+// /v1/beep
+//
+module.exports = function () {
+  this.send({
+    beep: this.beep()
+  })
 }
 ```
 
