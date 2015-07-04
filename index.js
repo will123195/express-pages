@@ -9,6 +9,11 @@ var Page = require('express-page')
 var hide = require('hide-property')
 var debug = require('debug')('express-pages')
 
+//
+// opts.dir (required)
+// opts.ext
+// opts.homepage
+//
 var Pages = module.exports = function Pages (opts) {
   if (!(this instanceof Pages)) {
     return new Pages(opts)
@@ -56,13 +61,11 @@ Pages.prototype.init = function (opts) {
     // $param to :param
     uri = uri.replace(/\$/g, ':')
 
-    debug(uri)
-
-    var folders = uri.split(path.sep)
-    if (folders[folders.length-1] === folders[folders.length-2]) {
-      folders.pop()
-      uri = folders.join(path.sep)
+    if (uri === opts.homepage) {
+      uri = '/'
     }
+
+    debug(uri)
 
     app.all(uri, function (req, res) {
       var controller = require(file.filename)

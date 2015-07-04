@@ -22,6 +22,7 @@ app.set('port', (process.env.PORT || 5000))
 app.use('/v1', pages({
   dir: './api',
   ext: '.js',
+  homepage: '/home',
   helpers: {
     beep: function () {
       return 'boop'
