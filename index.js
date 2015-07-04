@@ -7,6 +7,7 @@ var scan = require('sugar-glob')
 var path = require('path')
 var Page = require('express-page')
 var hide = require('hide-property')
+var debug = require('debug')('express-pages')
 
 var Pages = module.exports = function Pages(opts) {
   if (!(this instanceof Pages)) {
@@ -50,11 +51,10 @@ Pages.prototype.init = function (opts) {
     var uri = '/' + file.name
     uri = uri.substring(0, uri.lastIndexOf(ext))
 
-
     // $param to :param
     uri = uri.replace(/\$/g, ':')
 
-    console.log('uri:', uri)
+    debug(uri)
 
     var folders = uri.split(path.sep)
     if (folders[folders.length-1] === folders[folders.length-2]) {
@@ -64,16 +64,35 @@ Pages.prototype.init = function (opts) {
 
     app.all(uri, function(req, res) {
       var controller = require(file.filename)
+
       var helpers = opts.helpers || {}
-      helpers.post = req.body
+      helpers.get = function (fn) {
+        if (this.req.method === 'GET') {
+          fn()
+        }
+      }
+      helpers.post = function (fn) {
+        if (this.req.method === 'POST') {
+          fn()
+        }
+      }
       helpers.session = req.session
+      helpers.query = req.query
+      helpers.body = req.body
+      helpers.send = function (data) {
+        this.res.send(data)
+      }
+      helpers.error = function (err) {
+        if (!err) return
+        this.res.status(400).send(err)
+      }
+
       var page = Page(controller, helpers, req, res)
       page.setView(file.dir)
       // make url params available as this.$param
       parseParams.call(page)
       hide(page, 'req')
       hide(page, 'res')
-      page.send = page.res.send.bind(page.res)
       page.run()
     })
 
