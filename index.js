@@ -9,7 +9,7 @@ var Page = require('express-page')
 var hide = require('hide-property')
 var debug = require('debug')('express-pages')
 
-var Pages = module.exports = function Pages(opts) {
+var Pages = module.exports = function Pages (opts) {
   if (!(this instanceof Pages)) {
     return new Pages(opts)
   }
@@ -47,9 +47,11 @@ Pages.prototype.init = function (opts) {
   var pages = new scan({
     root: root
   })
-  pages.file(pattern, function(file) {
+  pages.file(pattern, function (file) {
     var uri = '/' + file.name
     uri = uri.substring(0, uri.lastIndexOf(ext))
+
+    uri = normalizeUri(uri)
 
     // $param to :param
     uri = uri.replace(/\$/g, ':')
@@ -62,7 +64,7 @@ Pages.prototype.init = function (opts) {
       uri = folders.join(path.sep)
     }
 
-    app.all(uri, function(req, res) {
+    app.all(uri, function (req, res) {
       var controller = require(file.filename)
 
       var helpers = opts.helpers || {}
@@ -100,9 +102,19 @@ Pages.prototype.init = function (opts) {
 
 }
 
-function parseParams() {
+function parseParams () {
   var self = this
   Object.keys(self.req.params).forEach(function(param) {
     self['$' + param] = self.req.params[param]
   })
+}
+
+
+function normalizeUri (view) {
+  view = view.split(path.sep)
+  var len = view.length
+  if (len > 1 && view[len-1] === view[len-2]) {
+    view.pop()
+  }
+  return view.join(path.sep)
 }
