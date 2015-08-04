@@ -12,7 +12,9 @@ var debug = require('debug')('express-pages')
 //
 // opts.dir (required)
 // opts.ext
+// opts.helpers
 // opts.homepage
+// opts.log
 //
 var Pages = module.exports = function Pages (opts) {
   if (!(this instanceof Pages)) {

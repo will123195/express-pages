@@ -6,6 +6,10 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/will123195/express-pages.git"
+  },
   "author": "will123195",
   "license": "MIT",
   "devDependencies": {
